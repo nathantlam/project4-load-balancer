@@ -1,0 +1,44 @@
+Aggie Cloud Solutions - Load Balancer Simulation
+Mode: quiet
+Requested clock cycles: 100000
+Random seed: 412
+Arrival probability per cycle: 0.450000
+Arrival batch range: 1-6
+Scaling: add above 80 * servers; remove below 50 * servers
+Scaling cooldown: 100 cycles
+Server limits per balancer: 1-1000
+Blocked incoming IP ranges:
+  10.0.0.0/8
+  192.168.0.0/16
+
+--- Main starting status ---
+Starting servers: 20
+Starting queue size: 2000
+Task time range: 5-50 clock cycles
+Initialization generated / rejected: 2010 / 10
+
+--- Main ending status ---
+Clock cycles completed: 100000
+Starting queue size: 2000
+Ending queue size: 2870
+Peak queue size: 3533
+Task time range: 5-50 clock cycles
+Generated requests (including setup): 158154
+Accepted requests (including setup): 157567
+New accepted requests after setup: 155567
+Rejected / blocked requests (including setup): 587
+Discarded accepted requests: 0
+Assigned requests: 154697
+Completed requests: 154655
+Completed processing / streaming: 77097 / 77558
+In-service requests: 42
+Ending total servers: 43
+Active (busy) servers: 42
+Inactive (idle) servers: 1
+Servers added / removed: 27 / 4
+Minimum / maximum servers: 20 / 45
+Server utilization: 100.00%
+Request and server accounting: PASS
+
+Simulation status: COMPLETE
+No extra cycles were used to drain unfinished jobs.

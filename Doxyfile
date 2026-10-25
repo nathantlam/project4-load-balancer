@@ -1,0 +1,14 @@
+PROJECT_NAME = "Aggie Cloud Solutions - Load Balancer"
+PROJECT_BRIEF = "C++ clock-cycle load balancer simulation"
+OUTPUT_DIRECTORY = docs
+INPUT = . MainPage.dox
+RECURSIVE = NO
+FILE_PATTERNS = *.h *.cpp *.dox
+GENERATE_HTML = YES
+GENERATE_LATEX = NO
+EXTRACT_ALL = YES
+WARN_IF_UNDOCUMENTED = YES
+WARN_IF_DOC_ERROR = YES
+QUIET = YES
+HAVE_DOT = NO
+HTML_OUTPUT = html

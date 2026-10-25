@@ -1,0 +1,73 @@
+/**
+ * @mainpage Aggie Cloud Solutions
+ *
+ * @section overview Project overview
+ * This C++17 program models incoming web requests using clock cycles rather than
+ * real network traffic. A FIFO queue feeds dynamically allocated WebServer
+ * objects. Each request contains incoming and outgoing IP addresses, a positive
+ * task time, and a P (processing) or S (streaming) job type.
+ *
+ * @section components Classes
+ * - Request stores job data.
+ * - WebServer accepts one job at a time and counts down its remaining cycles.
+ * - LoadBalancer owns the queue and servers, performs scaling, and records Statistics.
+ * - RequestGenerator creates seeded random requests and random arrival batches.
+ * - IPFilter blocks incoming IPv4 addresses using CIDR ranges.
+ * - Config reads and validates key=value settings.
+ * - Logger writes plain-text logs and optionally colors terminal events.
+ * - Switch implements the bonus: separate processing and streaming balancers.
+ *
+ * @section workflow Workflow
+ * main() reads settings and user input, fills each initial queue with 100 accepted
+ * requests per starting server, and prints starting information. Each cycle adds
+ * random arrivals, filters their source IPs, assigns waiting jobs to idle servers,
+ * processes one cycle of work, then checks scaling. A newly assigned job consumes
+ * its first processing cycle immediately; a time-1 job finishes in that cycle.
+ * The run ends at the requested time without draining unfinished work.
+ *
+ * @section scaling Server management
+ * Above 80 queued requests per current server, add one server. Below 50, remove
+ * one idle server. If all servers are busy, retry removal on a later cycle rather
+ * than interrupting a request. Actual changes are separated by the configured
+ * cooldown. The first change may occur at cycle 1. Configured minimum and maximum
+ * counts bound each pool. unique_ptr ownership frees removed servers.
+ * Queue targets are a control goal, not a guarantee during changing workloads.
+ *
+ * @section settings Configuration and execution
+ * Run `./loadbalancer` for interactive input or use
+ * `./loadbalancer --servers 20 --cycles 100000 --quiet --log required_run.log`.
+ * Use `--verbose --color` for event output, `--config PATH` for another settings
+ * file, `--seed N` for reproducibility, and `--bonus` for separate job-type pools.
+ * In bonus mode the requested starting server count applies to EACH pool.
+ * Both pools advance once per simulated cycle; no operating-system threads are
+ * needed for simultaneous simulated service. Each has independent statistics.
+ *
+ * config.txt controls task times, arrival probability/batch range, cooldown,
+ * server bounds, random seed, and blocked CIDR ranges. No source edit is needed
+ * for these settings. Repeating a seed and configuration with the same build
+ * reproduces a workload; standard-library random distributions can differ across
+ * compiler/library implementations.
+ *
+ * @section reports Logs and correctness
+ * Quiet mode writes starting and ending summaries to console and file. Verbose
+ * mode also records arrivals, blocks, assignments, completions, and scaling.
+ * Logs include starting/ending/peak queue sizes, task-time range, generated,
+ * accepted, rejected, assigned and completed jobs, unfinished jobs, server counts,
+ * scaling totals and utilization. Generated/accepted/rejected totals include
+ * initialization, which is also reported separately. No accepted job is discarded.
+ * Existing idle servers are different from servers already removed.
+ * Utilization is busy server-cycles divided by available server-cycles.
+ * Request accounting verifies accepted = completed + queued + in-service.
+ * Server accounting verifies initial + added - removed = ending server count.
+ *
+ * @section testing Verification
+ * Local development tests check server timing, invalid jobs, CIDR boundaries,
+ * blocking, seeded generation, cooldown, scaling, accounting, quiet/verbose modes,
+ * bonus routing, input validation, and the required 100000-cycle run. Tests are
+ * kept outside the source submission ZIP. In the working folder, run them with
+ * `make -f Makefile -f tests/tests.mk test`.
+ *
+ * @section build Build and documentation
+ * Build with `make`. Generate HTML documentation with `make docs` in docs/html.
+ * The source ZIP excludes executable files and compiled objects.
+ */

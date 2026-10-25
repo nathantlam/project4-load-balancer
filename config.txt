@@ -1,0 +1,12 @@
+# Edit these values instead of recompiling. Comments start with #.
+min_task_time=5
+max_task_time=50
+arrival_probability=0.45
+min_arrivals=1
+max_arrivals=6
+scaling_cooldown=100
+min_servers=1
+max_servers=1000
+random_seed=412
+# Comma-separated IPv4 CIDR ranges. Leave blank to disable blocking.
+blocked_ranges=10.0.0.0/8,192.168.0.0/16
